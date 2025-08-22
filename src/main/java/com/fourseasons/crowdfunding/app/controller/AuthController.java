@@ -40,9 +40,7 @@ public class AuthController {
     @PostMapping("/register")
     @Operation(summary = "使用者註冊", description = "創建新的使用者帳戶")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "註冊成功", content = @Content(schema = @Schema(implementation = AuthResponse.class))),
-            @ApiResponse(responseCode = "400", description = "請求參數錯誤"),
-            @ApiResponse(responseCode = "409", description = "使用者已存在")
+            @ApiResponse(responseCode = "200", description = "註冊成功", content = @Content(schema = @Schema(implementation = AuthResponse.class)))
     })
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         AuthResponse response = authService.register(registerRequest);
@@ -58,9 +56,7 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "使用者登入", description = "驗證使用者憑證並返回 JWT Token")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "登入成功", content = @Content(schema = @Schema(implementation = AuthResponse.class))),
-            @ApiResponse(responseCode = "400", description = "請求參數錯誤"),
-            @ApiResponse(responseCode = "401", description = "認證失敗")
+            @ApiResponse(responseCode = "200", description = "登入成功", content = @Content(schema = @Schema(implementation = AuthResponse.class)))
     })
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         AuthResponse response = authService.login(loginRequest);
@@ -75,8 +71,7 @@ public class AuthController {
     @PostMapping("/logout")
     @Operation(summary = "使用者登出", description = "清除使用者的認證狀態")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "登出成功"),
-            @ApiResponse(responseCode = "401", description = "未授權")
+            @ApiResponse(responseCode = "200", description = "登出成功")
     })
     public ResponseEntity<Map<String, String>> logout() {
         authService.logout();

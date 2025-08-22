@@ -32,6 +32,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        log.warn("驗證失敗 - 錯誤數量: {}", ex.getBindingResult().getErrorCount());
+
         Map<String, Object> errors = new HashMap<>();
         Map<String, String> fieldErrors = new HashMap<>();
 
@@ -39,6 +41,7 @@ public class GlobalExceptionHandler {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             fieldErrors.put(fieldName, errorMessage);
+            log.debug("驗證錯誤 - 欄位: {}, 訊息: {}", fieldName, errorMessage);
         });
 
         errors.put("message", "驗證失敗");
@@ -46,6 +49,40 @@ public class GlobalExceptionHandler {
         errors.put("status", HttpStatus.BAD_REQUEST.value());
 
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    /**
+     * 處理資源不存在異常
+     * 
+     * @param ex 資源不存在異常
+     * @return 錯誤回應
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        log.warn("資源不存在 - 錯誤訊息: {}", ex.getMessage());
+
+        Map<String, Object> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+        error.put("status", HttpStatus.NOT_FOUND.value());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    /**
+     * 處理未授權異常
+     * 
+     * @param ex 未授權異常
+     * @return 錯誤回應
+     */
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Map<String, Object>> handleUnauthorizedException(UnauthorizedException ex) {
+        log.warn("未授權存取 - 錯誤訊息: {}", ex.getMessage());
+
+        Map<String, Object> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+        error.put("status", HttpStatus.FORBIDDEN.value());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
     /**
