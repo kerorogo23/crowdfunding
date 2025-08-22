@@ -19,8 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 認證服務類
- * 處理使用者註冊、登入等認證相關業務邏輯
+ * 認證服務類 處理使用者註冊、登入等認證相關業務邏輯
  */
 @Service
 public class AuthService {
@@ -73,11 +72,7 @@ public class AuthService {
 
         String token = jwtUtils.generateToken(savedUser, claims);
 
-        return new AuthResponse(
-                token,
-                savedUser.getId(),
-                savedUser.getUsername(),
-                savedUser.getEmail(),
+        return new AuthResponse(token, savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(),
                 savedUser.getRole().name());
     }
 
@@ -92,9 +87,7 @@ public class AuthService {
         try {
             // 進行認證
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getEmail(),
-                            loginRequest.getPassword()));
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -108,12 +101,7 @@ public class AuthService {
 
             String token = jwtUtils.generateToken(user, claims);
 
-            return new AuthResponse(
-                    token,
-                    user.getId(),
-                    user.getUsername(),
-                    user.getEmail(),
-                    user.getRole().name());
+            return new AuthResponse(token, user.getId(), user.getUsername(), user.getEmail(), user.getRole().name());
 
         } catch (Exception e) {
             throw new RuntimeException("登入失敗：電子郵件或密碼錯誤");
@@ -121,9 +109,7 @@ public class AuthService {
     }
 
     /**
-     * 使用者登出
-     * 注意：在 JWT 無狀態架構中，登出主要由前端處理
-     * 後端可以選擇實作 Token 黑名單機制
+     * 使用者登出 注意：在 JWT 無狀態架構中，登出主要由前端處理 後端可以選擇實作 Token 黑名單機制
      */
     public void logout() {
         SecurityContextHolder.clearContext();

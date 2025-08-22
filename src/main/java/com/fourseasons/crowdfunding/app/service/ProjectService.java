@@ -32,6 +32,9 @@ public class ProjectService {
 
     /**
      * 創建專案
+     * 
+     * @param request 專案請求
+     * @return 專案回應
      */
     public ProjectResponse createProject(ProjectRequest request) {
         User currentUser = getCurrentUser();
@@ -49,6 +52,10 @@ public class ProjectService {
 
     /**
      * 更新專案
+     * 
+     * @param projectId 專案 ID
+     * @param request   專案請求
+     * @return 專案回應
      */
     public ProjectResponse updateProject(Long projectId, ProjectRequest request) {
         Project project = getProjectEntityById(projectId);
@@ -74,14 +81,15 @@ public class ProjectService {
 
     /**
      * 刪除專案
+     * 
+     * @param projectId 專案 ID
      */
     public void deleteProject(Long projectId) {
         Project project = getProjectEntityById(projectId);
         User currentUser = getCurrentUser();
 
         // 檢查權限：只有創建者或管理員可以刪除
-        if (!project.getCreator().getId().equals(currentUser.getId()) &&
-                currentUser.getRole() != User.Role.ADMIN) {
+        if (!project.getCreator().getId().equals(currentUser.getId()) && currentUser.getRole() != User.Role.ADMIN) {
             throw new UnauthorizedException("您沒有權限刪除此專案");
         }
 
@@ -90,6 +98,9 @@ public class ProjectService {
 
     /**
      * 根據 ID 查詢專案
+     * 
+     * @param projectId 專案 ID
+     * @return 專案回應
      */
     @Transactional(readOnly = true)
     public ProjectResponse getProjectById(Long projectId) {
@@ -98,9 +109,9 @@ public class ProjectService {
 
         // 檢查權限：只有已核准的專案或創建者可以查看
         User currentUser = getCurrentUser();
-        if (project.getStatus() != Project.ProjectStatus.APPROVED &&
-                !project.getCreator().getId().equals(currentUser.getId()) &&
-                currentUser.getRole() != User.Role.ADMIN) {
+        if (project.getStatus() != Project.ProjectStatus.APPROVED
+                && !project.getCreator().getId().equals(currentUser.getId())
+                && currentUser.getRole() != User.Role.ADMIN) {
             throw new UnauthorizedException("您沒有權限查看此專案");
         }
 
@@ -109,6 +120,11 @@ public class ProjectService {
 
     /**
      * 查詢專案列表（管理員功能）
+     * 
+     * @param keyword  搜尋關鍵字
+     * @param status   專案狀態
+     * @param pageable 分頁參數
+     * @return 專案分頁回應
      */
     @Transactional(readOnly = true)
     public Page<ProjectResponse> getProjects(String keyword, Project.ProjectStatus status, Pageable pageable) {
@@ -125,6 +141,10 @@ public class ProjectService {
 
     /**
      * 查詢公開專案列表
+     * 
+     * @param keyword  搜尋關鍵字
+     * @param pageable 分頁參數
+     * @return 專案分頁回應
      */
     @Transactional(readOnly = true)
     public Page<ProjectResponse> getPublicProjects(String keyword, Pageable pageable) {
@@ -134,6 +154,9 @@ public class ProjectService {
 
     /**
      * 查詢使用者的專案
+     * 
+     * @param pageable 分頁參數
+     * @return 專案分頁回應
      */
     @Transactional(readOnly = true)
     public Page<ProjectResponse> getUserProjects(Pageable pageable) {
@@ -144,6 +167,10 @@ public class ProjectService {
 
     /**
      * 更新專案狀態（管理員功能）
+     * 
+     * @param projectId 專案 ID
+     * @param request   專案狀態請求
+     * @return 專案回應
      */
     public ProjectResponse updateProjectStatus(Long projectId, ProjectStatusRequest request) {
         Project project = getProjectEntityById(projectId);
@@ -166,6 +193,9 @@ public class ProjectService {
 
     /**
      * 提交專案審核
+     * 
+     * @param projectId 專案 ID
+     * @return 專案回應
      */
     public ProjectResponse submitProjectForReview(Long projectId) {
         Project project = getProjectEntityById(projectId);
@@ -188,24 +218,31 @@ public class ProjectService {
 
     /**
      * 獲取當前使用者
+     * 
+     * @return 當前使用者
      */
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UnauthorizedException("使用者不存在"));
+        return userRepository.findByUsername(username).orElseThrow(() -> new UnauthorizedException("使用者不存在"));
     }
 
     /**
      * 根據 ID 獲取專案實體
+     * 
+     * @param projectId 專案 ID
+     * @return 專案實體
      */
     private Project getProjectEntityById(Long projectId) {
-        return projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResourceNotFoundException("專案不存在"));
+        return projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("專案不存在"));
     }
 
     /**
      * 檢查狀態轉換是否有效
+     * 
+     * @param currentStatus 當前狀態
+     * @param newStatus     新狀態
+     * @return 是否有效的狀態轉換
      */
     private boolean isValidStatusTransition(Project.ProjectStatus currentStatus, Project.ProjectStatus newStatus) {
         switch (currentStatus) {

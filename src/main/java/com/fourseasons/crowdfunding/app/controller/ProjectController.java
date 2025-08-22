@@ -38,13 +38,15 @@ public class ProjectController {
 
         /**
          * 創建專案
+         * 
+         * @param request 專案請求
+         * @return 專案回應
          */
         @PostMapping
         @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
         @Operation(summary = "創建專案", description = "創建新的專案")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "201", description = "專案創建成功", content = @Content(schema = @Schema(implementation = ProjectResponse.class)))
-        })
+                        @ApiResponse(responseCode = "201", description = "專案創建成功", content = @Content(schema = @Schema(implementation = ProjectResponse.class))) })
         public ResponseEntity<ProjectResponse> createProject(@Valid @RequestBody ProjectRequest request) {
                 ProjectResponse response = projectService.createProject(request);
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -52,13 +54,16 @@ public class ProjectController {
 
         /**
          * 更新專案
+         * 
+         * @param id      專案 ID
+         * @param request 專案請求
+         * @return 專案回應
          */
         @PutMapping("/{id}")
         @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
         @Operation(summary = "更新專案", description = "更新指定專案的資訊")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "專案更新成功", content = @Content(schema = @Schema(implementation = ProjectResponse.class)))
-        })
+                        @ApiResponse(responseCode = "200", description = "專案更新成功", content = @Content(schema = @Schema(implementation = ProjectResponse.class))) })
         public ResponseEntity<ProjectResponse> updateProject(
                         @Parameter(name = "id", description = "專案 ID", example = "1", required = true) @PathVariable Long id,
                         @Valid @RequestBody ProjectRequest request) {
@@ -68,13 +73,15 @@ public class ProjectController {
 
         /**
          * 刪除專案
+         * 
+         * @param id 專案 ID
+         * @return 無內容回應
          */
         @DeleteMapping("/{id}")
         @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
         @Operation(summary = "刪除專案", description = "刪除指定的專案")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "204", description = "專案刪除成功")
-        })
+                        @ApiResponse(responseCode = "204", description = "專案刪除成功") })
         public ResponseEntity<Void> deleteProject(
                         @Parameter(name = "id", description = "專案 ID", example = "1", required = true) @PathVariable Long id) {
                 projectService.deleteProject(id);
@@ -83,12 +90,14 @@ public class ProjectController {
 
         /**
          * 查詢單一專案
+         * 
+         * @param id 專案 ID
+         * @return 專案回應
          */
         @GetMapping("/{id}")
         @Operation(summary = "查詢專案", description = "根據 ID 查詢專案詳細資訊")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "查詢成功", content = @Content(schema = @Schema(implementation = ProjectResponse.class)))
-        })
+                        @ApiResponse(responseCode = "200", description = "查詢成功", content = @Content(schema = @Schema(implementation = ProjectResponse.class))) })
         public ResponseEntity<ProjectResponse> getProject(
                         @Parameter(name = "id", description = "專案 ID", example = "1", required = true) @PathVariable Long id) {
                 ProjectResponse response = projectService.getProjectById(id);
@@ -97,13 +106,20 @@ public class ProjectController {
 
         /**
          * 查詢專案列表（管理員功能）
+         * 
+         * @param keyword 搜尋關鍵字
+         * @param status  專案狀態
+         * @param page    頁碼
+         * @param size    每頁大小
+         * @param sortBy  排序欄位
+         * @param sortDir 排序方向
+         * @return 專案分頁回應
          */
         @GetMapping("/admin")
         @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "查詢所有專案", description = "管理員查詢所有專案列表")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "查詢成功")
-        })
+                        @ApiResponse(responseCode = "200", description = "查詢成功") })
         public ResponseEntity<Page<ProjectResponse>> getAllProjects(
                         @Parameter(description = "搜尋關鍵字") @RequestParam(required = false) String keyword,
                         @Parameter(description = "專案狀態") @RequestParam(required = false) Project.ProjectStatus status,
@@ -122,12 +138,18 @@ public class ProjectController {
 
         /**
          * 查詢公開專案列表
+         * 
+         * @param keyword 搜尋關鍵字
+         * @param page    頁碼
+         * @param size    每頁大小
+         * @param sortBy  排序欄位
+         * @param sortDir 排序方向
+         * @return 專案分頁回應
          */
         @GetMapping
         @Operation(summary = "查詢公開專案", description = "查詢已核准的公開專案列表")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "查詢成功")
-        })
+                        @ApiResponse(responseCode = "200", description = "查詢成功") })
         public ResponseEntity<Page<ProjectResponse>> getPublicProjects(
                         @Parameter(description = "搜尋關鍵字") @RequestParam(required = false) String keyword,
                         @Parameter(description = "頁碼") @RequestParam(defaultValue = "0") int page,
@@ -145,13 +167,18 @@ public class ProjectController {
 
         /**
          * 查詢使用者的專案
+         * 
+         * @param page    頁碼
+         * @param size    每頁大小
+         * @param sortBy  排序欄位
+         * @param sortDir 排序方向
+         * @return 專案分頁回應
          */
         @GetMapping("/my")
         @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
         @Operation(summary = "查詢我的專案", description = "查詢當前使用者的專案列表")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "查詢成功")
-        })
+                        @ApiResponse(responseCode = "200", description = "查詢成功") })
         public ResponseEntity<Page<ProjectResponse>> getMyProjects(
                         @Parameter(description = "頁碼") @RequestParam(defaultValue = "0") int page,
                         @Parameter(description = "每頁大小") @RequestParam(defaultValue = "10") int size,
@@ -168,13 +195,16 @@ public class ProjectController {
 
         /**
          * 更新專案狀態（管理員功能）
+         * 
+         * @param id      專案 ID
+         * @param request 專案狀態請求
+         * @return 專案回應
          */
         @PatchMapping("/{id}/status")
         @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "更新專案狀態", description = "管理員更新專案狀態")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "狀態更新成功", content = @Content(schema = @Schema(implementation = ProjectResponse.class)))
-        })
+                        @ApiResponse(responseCode = "200", description = "狀態更新成功", content = @Content(schema = @Schema(implementation = ProjectResponse.class))) })
         public ResponseEntity<ProjectResponse> updateProjectStatus(
                         @Parameter(name = "id", description = "專案 ID", example = "1", required = true) @PathVariable Long id,
                         @Valid @RequestBody ProjectStatusRequest request) {
@@ -184,13 +214,15 @@ public class ProjectController {
 
         /**
          * 提交專案審核
+         * 
+         * @param id 專案 ID
+         * @return 專案回應
          */
         @PostMapping("/{id}/submit")
         @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
         @Operation(summary = "提交專案審核", description = "將草稿專案提交給管理員審核")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "提交成功", content = @Content(schema = @Schema(implementation = ProjectResponse.class)))
-        })
+                        @ApiResponse(responseCode = "200", description = "提交成功", content = @Content(schema = @Schema(implementation = ProjectResponse.class))) })
         public ResponseEntity<ProjectResponse> submitProjectForReview(
                         @Parameter(name = "id", description = "專案 ID", example = "1", required = true) @PathVariable Long id) {
                 ProjectResponse response = projectService.submitProjectForReview(id);

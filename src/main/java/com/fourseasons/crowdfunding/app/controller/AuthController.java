@@ -19,8 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 認證控制器
- * 提供使用者註冊、登入、登出等 API 端點
+ * 認證控制器 提供使用者註冊、登入、登出等 API 端點
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -40,8 +39,7 @@ public class AuthController {
     @PostMapping("/register")
     @Operation(summary = "使用者註冊", description = "創建新的使用者帳戶")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "註冊成功", content = @Content(schema = @Schema(implementation = AuthResponse.class)))
-    })
+            @ApiResponse(responseCode = "200", description = "註冊成功", content = @Content(schema = @Schema(implementation = AuthResponse.class))) })
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         AuthResponse response = authService.register(registerRequest);
         return ResponseEntity.ok(response);
@@ -56,8 +54,7 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "使用者登入", description = "驗證使用者憑證並返回 JWT Token")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "登入成功", content = @Content(schema = @Schema(implementation = AuthResponse.class)))
-    })
+            @ApiResponse(responseCode = "200", description = "登入成功", content = @Content(schema = @Schema(implementation = AuthResponse.class))) })
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         AuthResponse response = authService.login(loginRequest);
         return ResponseEntity.ok(response);
@@ -71,8 +68,7 @@ public class AuthController {
     @PostMapping("/logout")
     @Operation(summary = "使用者登出", description = "清除使用者的認證狀態")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "登出成功")
-    })
+            @ApiResponse(responseCode = "200", description = "登出成功") })
     public ResponseEntity<Map<String, String>> logout() {
         authService.logout();
 
@@ -90,8 +86,7 @@ public class AuthController {
     @GetMapping("/test")
     @Operation(summary = "服務健康檢查", description = "檢查認證服務是否正常運行")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "服務正常")
-    })
+            @ApiResponse(responseCode = "200", description = "服務正常") })
     public ResponseEntity<Map<String, String>> test() {
         Map<String, String> response = new HashMap<>();
         response.put("message", "認證服務正常運行");

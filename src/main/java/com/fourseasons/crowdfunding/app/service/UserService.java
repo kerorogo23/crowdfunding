@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 使用者服務類
- * 處理使用者相關業務邏輯
+ * 使用者服務類 處理使用者相關業務邏輯
  */
 @Service
 public class UserService {
@@ -29,8 +28,7 @@ public class UserService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User user = userRepository.findByUsername(username)
-                .orElseGet(() -> userRepository.findByEmail(username)
-                        .orElse(null));
+                .orElseGet(() -> userRepository.findByEmail(username).orElse(null));
 
         if (user == null) {
             throw new RuntimeException("找不到當前使用者");
@@ -41,22 +39,21 @@ public class UserService {
 
     /**
      * 根據使用者 ID 獲取使用者資訊
-     * 
+     *
      * @param userId 使用者 ID
      * @return 使用者回應 DTO
      * @throws RuntimeException 如果找不到使用者
      */
     @Transactional(readOnly = true)
     public UserResponse getUserById(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("找不到使用者 ID: " + userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("找不到使用者 ID: " + userId));
 
         return convertToUserResponse(user);
     }
 
     /**
      * 將 User 實體轉換為 UserResponse DTO
-     * 
+     *
      * @param user 使用者實體
      * @return 使用者回應 DTO
      */
