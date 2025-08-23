@@ -1,6 +1,6 @@
 package com.fourseasons.crowdfunding.app.service;
 
-import com.fourseasons.crowdfunding.app.dto.UserResponse;
+import com.fourseasons.crowdfunding.app.dto.user.UserResponse;
 import com.fourseasons.crowdfunding.app.entity.User;
 import com.fourseasons.crowdfunding.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.fourseasons.crowdfunding.app.dto;
+package com.fourseasons.crowdfunding.app.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

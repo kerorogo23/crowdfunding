@@ -1,8 +1,8 @@
 package com.fourseasons.crowdfunding.app.service;
 
-import com.fourseasons.crowdfunding.app.dto.AuthResponse;
-import com.fourseasons.crowdfunding.app.dto.LoginRequest;
-import com.fourseasons.crowdfunding.app.dto.RegisterRequest;
+import com.fourseasons.crowdfunding.app.dto.auth.AuthResponse;
+import com.fourseasons.crowdfunding.app.dto.auth.LoginRequest;
+import com.fourseasons.crowdfunding.app.dto.auth.RegisterRequest;
 import com.fourseasons.crowdfunding.app.entity.User;
 import com.fourseasons.crowdfunding.app.repository.UserRepository;
 import com.fourseasons.crowdfunding.app.security.JwtUtils;

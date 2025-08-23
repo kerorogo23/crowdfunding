@@ -1,8 +1,8 @@
 package com.fourseasons.crowdfunding.app.service;
 
-import com.fourseasons.crowdfunding.app.dto.ProjectRequest;
-import com.fourseasons.crowdfunding.app.dto.ProjectResponse;
-import com.fourseasons.crowdfunding.app.dto.ProjectStatusRequest;
+import com.fourseasons.crowdfunding.app.dto.project.ProjectRequest;
+import com.fourseasons.crowdfunding.app.dto.project.ProjectResponse;
+import com.fourseasons.crowdfunding.app.dto.project.ProjectStatusRequest;
 import com.fourseasons.crowdfunding.app.entity.Project;
 import com.fourseasons.crowdfunding.app.entity.User;
 import com.fourseasons.crowdfunding.app.exception.ResourceNotFoundException;

@@ -1,8 +1,8 @@
 package com.fourseasons.crowdfunding.app.controller;
 
-import com.fourseasons.crowdfunding.app.dto.AuthResponse;
-import com.fourseasons.crowdfunding.app.dto.LoginRequest;
-import com.fourseasons.crowdfunding.app.dto.RegisterRequest;
+import com.fourseasons.crowdfunding.app.dto.auth.AuthResponse;
+import com.fourseasons.crowdfunding.app.dto.auth.LoginRequest;
+import com.fourseasons.crowdfunding.app.dto.auth.RegisterRequest;
 import com.fourseasons.crowdfunding.app.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
