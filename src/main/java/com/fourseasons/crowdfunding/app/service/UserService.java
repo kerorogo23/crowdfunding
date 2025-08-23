@@ -62,7 +62,7 @@ public class UserService {
         response.setId(user.getId());
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());
-        response.setRole(user.getRole().name());
+        response.setRole(user.getRole().getName());
         response.setCreatedAt(user.getCreatedAt());
         response.setUpdatedAt(user.getUpdatedAt());
         return response;

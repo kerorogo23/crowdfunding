@@ -4,7 +4,9 @@ import com.fourseasons.crowdfunding.app.dto.auth.AuthResponse;
 import com.fourseasons.crowdfunding.app.dto.auth.LoginRequest;
 import com.fourseasons.crowdfunding.app.dto.auth.RegisterRequest;
 import com.fourseasons.crowdfunding.app.entity.User;
+import com.fourseasons.crowdfunding.app.entity.Role;
 import com.fourseasons.crowdfunding.app.repository.UserRepository;
+import com.fourseasons.crowdfunding.app.repository.RoleRepository;
 import com.fourseasons.crowdfunding.app.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +28,9 @@ public class AuthService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -55,12 +60,16 @@ public class AuthService {
             throw new RuntimeException("使用者名稱已被使用");
         }
 
+        // 獲取預設角色（ROLE_MEMBER）
+        Role defaultRole = roleRepository.findByName(Role.ROLE_MEMBER)
+                .orElseThrow(() -> new RuntimeException("預設角色不存在"));
+
         // 創建新使用者
         User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setRole(User.Role.USER);
+        user.setRole(defaultRole);
 
         // 儲存使用者
         User savedUser = userRepository.save(user);
@@ -68,12 +77,12 @@ public class AuthService {
         // 生成 JWT Token
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", savedUser.getId());
-        claims.put("role", savedUser.getRole().name());
+        claims.put("role", savedUser.getRole().getName());
 
         String token = jwtUtils.generateToken(savedUser, claims);
 
         return new AuthResponse(token, savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(),
-                savedUser.getRole().name());
+                savedUser.getRole().getName());
     }
 
     /**
@@ -97,11 +106,11 @@ public class AuthService {
             // 生成 JWT Token
             Map<String, Object> claims = new HashMap<>();
             claims.put("userId", user.getId());
-            claims.put("role", user.getRole().name());
+            claims.put("role", user.getRole().getName());
 
             String token = jwtUtils.generateToken(user, claims);
 
-            return new AuthResponse(token, user.getId(), user.getUsername(), user.getEmail(), user.getRole().name());
+            return new AuthResponse(token, user.getId(), user.getUsername(), user.getEmail(), user.getRole().getName());
 
         } catch (Exception e) {
             throw new RuntimeException("登入失敗：電子郵件或密碼錯誤");

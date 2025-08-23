@@ -7,12 +7,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import org.hibernate.annotations.Comment;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
-import com.fourseasons.crowdfunding.app.entity.Project;
 
 /**
  * 使用者實體類
@@ -25,33 +24,40 @@ import com.fourseasons.crowdfunding.app.entity.Project;
 @AllArgsConstructor
 public class User implements UserDetails {
 
+    @Comment("使用者ID")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Comment("使用者名稱")
     @Column(unique = true, nullable = false, length = 50)
     private String username;
 
+    @Comment("電子郵件")
     @Column(unique = true, nullable = false, length = 100)
     private String email;
 
+    @Comment("密碼")
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role = Role.USER;
+    @Comment("使用者角色")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Comment("建立時間")
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Comment("更新時間")
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @Comment("是否啟用")
     @Column(name = "is_enabled", nullable = false)
     private boolean enabled = true;
 
-    // 與專案的關聯（一對多）
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Project> projects = new ArrayList<>();
 
@@ -69,7 +75,7 @@ public class User implements UserDetails {
     // Spring Security UserDetails 介面實作
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.getName()));
     }
 
     @Override
@@ -92,10 +98,4 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    /**
-     * 使用者角色列舉
-     */
-    public enum Role {
-        USER, ADMIN
-    }
 }
