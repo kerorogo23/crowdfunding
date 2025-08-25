@@ -34,11 +34,11 @@ public class ProjectCategoryService {
     /**
      * 根據ID獲取分類
      * 
-     * @param id 分類ID
+     * @param categoryId 分類ID
      * @return 分類資訊
      */
-    public ProjectCategoryResponse getCategoryById(Long id) {
-        ProjectCategory category = categoryRepository.findById(id)
+    public ProjectCategoryResponse getCategoryById(Long categoryId) {
+        ProjectCategory category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("分類不存在"));
         return convertToResponse(category);
     }
@@ -62,12 +62,12 @@ public class ProjectCategoryService {
     /**
      * 更新分類
      * 
-     * @param id       分類ID
-     * @param category 更新的分類資訊
+     * @param categoryId 分類ID
+     * @param category   更新的分類資訊
      * @return 更新後的分類
      */
-    public ProjectCategoryResponse updateCategory(Long id, ProjectCategory category) {
-        ProjectCategory existingCategory = categoryRepository.findById(id)
+    public ProjectCategoryResponse updateCategory(Long categoryId, ProjectCategory category) {
+        ProjectCategory existingCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("分類不存在"));
 
         // 檢查名稱是否與其他分類重複
@@ -87,10 +87,10 @@ public class ProjectCategoryService {
     /**
      * 刪除分類（軟刪除）
      * 
-     * @param id 分類ID
+     * @param categoryId 分類ID
      */
-    public void deleteCategory(Long id) {
-        ProjectCategory category = categoryRepository.findById(id)
+    public void deleteCategory(Long categoryId) {
+        ProjectCategory category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("分類不存在"));
 
         category.setActive(false);

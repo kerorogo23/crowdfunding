@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Schema(description = "使用者資訊回應")
 public class UserResponse {
     @Schema(description = "使用者 ID", example = "1")
-    private Long id;
+    private Long userId;
 
     @Schema(description = "使用者名稱", example = "john_doe")
     private String username;

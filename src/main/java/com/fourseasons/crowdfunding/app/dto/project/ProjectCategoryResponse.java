@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProjectCategoryResponse {
 
-    private Long id;
+    private Long categoryId;
     private String name;
     private String description;
     private boolean active;

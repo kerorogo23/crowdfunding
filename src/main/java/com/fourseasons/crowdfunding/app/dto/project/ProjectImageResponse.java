@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProjectImageResponse {
 
-    private Long id;
+    private Long imageId;
     private String imageUrl;
     private String altText;
     private boolean isMain;

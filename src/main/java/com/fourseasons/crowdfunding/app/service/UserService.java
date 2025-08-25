@@ -59,7 +59,7 @@ public class UserService {
      */
     private UserResponse convertToUserResponse(User user) {
         UserResponse response = new UserResponse();
-        response.setId(user.getId());
+        response.setUserId(user.getId());
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());
         response.setRole(user.getRole().getName());

@@ -24,6 +24,7 @@ public class ProjectCategory {
     @Comment("分類ID")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id")
     private Long id;
 
     @Comment("分類名稱")

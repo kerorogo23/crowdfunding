@@ -15,8 +15,7 @@ import java.time.LocalDateTime;
 @Schema(description = "專案資訊回應")
 public class ProjectResponse {
 
-    @Schema(description = "專案 ID", example = "1")
-    private Long projectId;
+    private Long id;
 
     @Schema(description = "專案標題", example = "環保科技創新專案")
     private String title;
@@ -68,7 +67,7 @@ public class ProjectResponse {
      */
     public static ProjectResponse fromProject(Project project) {
         ProjectResponse response = new ProjectResponse();
-        response.setProjectId(project.getProjectId());
+        response.setId(project.getId());
         response.setTitle(project.getTitle());
         response.setDescription(project.getDescription());
         response.setGoalAmount(project.getGoalAmount());
@@ -86,7 +85,7 @@ public class ProjectResponse {
         // 轉換分類資訊
         if (project.getCategory() != null) {
             ProjectCategoryResponse categoryResponse = new ProjectCategoryResponse();
-            categoryResponse.setId(project.getCategory().getId());
+            categoryResponse.setCategoryId(project.getCategory().getId());
             categoryResponse.setName(project.getCategory().getName());
             categoryResponse.setDescription(project.getCategory().getDescription());
             categoryResponse.setActive(project.getCategory().isActive());
@@ -98,7 +97,7 @@ public class ProjectResponse {
         // 轉換創建者資訊
         if (project.getCreator() != null) {
             UserResponse creatorResponse = new UserResponse();
-            creatorResponse.setId(project.getCreator().getId());
+            creatorResponse.setUserId(project.getCreator().getId());
             creatorResponse.setUsername(project.getCreator().getUsername());
             creatorResponse.setEmail(project.getCreator().getEmail());
             creatorResponse.setRole(project.getCreator().getRole().toString());

@@ -27,7 +27,8 @@ public class Project {
     @Comment("專案ID")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long projectId;
+    @Column(name = "project_id")
+    private Long id;
 
     @Comment("專案標題")
     @Column(nullable = false, length = 200)

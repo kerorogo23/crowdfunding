@@ -22,6 +22,7 @@ public class ProjectImage {
     @Comment("圖片ID")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "image_id")
     private Long id;
 
     @Comment("所屬專案")

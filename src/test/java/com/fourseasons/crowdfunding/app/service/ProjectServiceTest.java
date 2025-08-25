@@ -70,7 +70,7 @@ class ProjectServiceTest {
 
         // 設置測試專案
         testProject = new Project();
-        testProject.setProjectId(1L);
+        testProject.setId(1L);
         testProject.setTitle("測試專案");
         testProject.setDescription("這是一個測試專案");
         testProject.setGoalAmount(new BigDecimal("100000"));
@@ -121,7 +121,7 @@ class ProjectServiceTest {
 
         // Assert
         assertNotNull(response);
-        assertEquals(testProject.getProjectId(), response.getProjectId());
+        assertEquals(testProject.getId(), response.getId());
         assertEquals(testProject.getTitle(), response.getTitle());
     }
 

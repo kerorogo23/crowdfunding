@@ -27,6 +27,7 @@ public class User implements UserDetails {
     @Comment("使用者ID")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Comment("使用者名稱")

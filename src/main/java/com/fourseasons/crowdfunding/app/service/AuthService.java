@@ -110,7 +110,8 @@ public class AuthService {
 
             String token = jwtUtils.generateToken(user, claims);
 
-            return new AuthResponse(token, user.getId(), user.getUsername(), user.getEmail(), user.getRole().getName());
+            return new AuthResponse(token, user.getId(), user.getUsername(), user.getEmail(),
+                    user.getRole().getName());
 
         } catch (Exception e) {
             throw new RuntimeException("登入失敗：電子郵件或密碼錯誤");

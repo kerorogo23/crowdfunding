@@ -14,25 +14,25 @@ import java.util.Optional;
 public interface ProjectImageRepository extends JpaRepository<ProjectImage, Long> {
 
     /**
-     * 根據專案ID查找所有圖片
+     * 根據專案ID查找所有圖片（使用下劃線屬性導航）
      * 
      * @param projectId 專案ID
      * @return 圖片列表
      */
-    List<ProjectImage> findByProjectIdOrderBySortOrderAsc(Long projectId);
+    List<ProjectImage> findByProject_IdOrderBySortOrderAsc(Long projectId);
 
     /**
-     * 查找專案的主圖
+     * 查找專案的主圖（使用下劃線屬性導航）
      * 
      * @param projectId 專案ID
      * @return 主圖
      */
-    Optional<ProjectImage> findByProjectIdAndIsMainTrue(Long projectId);
+    Optional<ProjectImage> findByProject_IdAndIsMainTrue(Long projectId);
 
     /**
-     * 根據專案ID刪除所有圖片
+     * 根據專案ID刪除所有圖片（使用下劃線屬性導航）
      * 
      * @param projectId 專案ID
      */
-    void deleteByProjectId(Long projectId);
+    void deleteByProject_Id(Long projectId);
 }

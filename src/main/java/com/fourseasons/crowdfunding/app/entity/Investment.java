@@ -26,6 +26,7 @@ public class Investment {
     @Comment("投資記錄ID")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "investment_id")
     private Long id;
 
     @Comment("投資金額")

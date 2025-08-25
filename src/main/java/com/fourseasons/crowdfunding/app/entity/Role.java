@@ -19,6 +19,7 @@ public class Role {
     @Comment("角色ID")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private Long id;
 
     @Comment("角色名稱")

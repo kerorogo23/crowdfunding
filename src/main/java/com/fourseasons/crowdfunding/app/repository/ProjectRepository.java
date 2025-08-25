@@ -83,18 +83,18 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
         /**
          * 檢查專案是否屬於指定使用者
          */
-        boolean existsByProjectIdAndCreator(Long projectId, User creator);
+        boolean existsByIdAndCreator(Long id, User creator);
 
         /**
          * 根據 ID 查詢專案（包含創建者資訊）
          */
-        @Query("SELECT p FROM Project p LEFT JOIN FETCH p.creator WHERE p.projectId = :projectId")
-        Optional<Project> findByIdWithCreator(@Param("projectId") Long projectId);
+        @Query("SELECT p FROM Project p LEFT JOIN FETCH p.creator WHERE p.id = :id")
+        Optional<Project> findByIdWithCreator(@Param("id") Long id);
 
         /**
-         * 根據分類查詢專案
+         * 根據分類查詢專案（使用下劃線屬性導航）
          */
-        List<Project> findByCategoryId(Long categoryId);
+        List<Project> findByCategory_Id(Long categoryId);
 
         /**
          * 查詢正在進行中的專案

@@ -273,7 +273,7 @@ public class ProjectService {
      * @return 專案列表
      */
     public List<ProjectResponse> getProjectsByCategory(Long categoryId) {
-        List<Project> projects = projectRepository.findByCategoryId(categoryId);
+        List<Project> projects = projectRepository.findByCategory_Id(categoryId);
         return projects.stream()
                 .map(ProjectResponse::fromProject)
                 .collect(java.util.stream.Collectors.toList());

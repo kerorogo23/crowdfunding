@@ -36,10 +36,10 @@ public class ProjectCategoryController {
     /**
      * 根據ID獲取分類
      */
-    @GetMapping("/{id}")
+    @GetMapping("/{categoryId}")
     @Operation(summary = "根據ID獲取分類", description = "根據分類ID獲取詳細資訊")
-    public ResponseEntity<ProjectCategoryResponse> getCategoryById(@PathVariable Long id) {
-        ProjectCategoryResponse category = categoryService.getCategoryById(id);
+    public ResponseEntity<ProjectCategoryResponse> getCategoryById(@PathVariable Long categoryId) {
+        ProjectCategoryResponse category = categoryService.getCategoryById(categoryId);
         return ResponseEntity.ok(category);
     }
 
@@ -57,24 +57,24 @@ public class ProjectCategoryController {
     /**
      * 更新分類（管理員功能）
      */
-    @PutMapping("/{id}")
+    @PutMapping("/{categoryId}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "更新分類", description = "更新專案分類資訊（僅管理員）")
     public ResponseEntity<ProjectCategoryResponse> updateCategory(
-            @PathVariable Long id,
+            @PathVariable Long categoryId,
             @RequestBody ProjectCategory category) {
-        ProjectCategoryResponse updatedCategory = categoryService.updateCategory(id, category);
+        ProjectCategoryResponse updatedCategory = categoryService.updateCategory(categoryId, category);
         return ResponseEntity.ok(updatedCategory);
     }
 
     /**
      * 刪除分類（管理員功能）
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{categoryId}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "刪除分類", description = "刪除專案分類（僅管理員）")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
+        categoryService.deleteCategory(categoryId);
         return ResponseEntity.ok().build();
     }
 }
