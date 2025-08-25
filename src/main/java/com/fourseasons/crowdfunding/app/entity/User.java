@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
-import com.fourseasons.crowdfunding.app.entity.Investment;
 
 /**
  * 使用者實體類

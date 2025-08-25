@@ -3,14 +3,12 @@ package com.fourseasons.crowdfunding.app.service;
 import com.fourseasons.crowdfunding.app.dto.project.ProjectRequest;
 import com.fourseasons.crowdfunding.app.dto.project.ProjectResponse;
 import com.fourseasons.crowdfunding.app.dto.project.ProjectStatusRequest;
-import com.fourseasons.crowdfunding.app.dto.project.ProjectCategoryResponse;
 import com.fourseasons.crowdfunding.app.entity.Project;
 import com.fourseasons.crowdfunding.app.entity.User;
 import com.fourseasons.crowdfunding.app.exception.ResourceNotFoundException;
 import com.fourseasons.crowdfunding.app.exception.UnauthorizedException;
 import com.fourseasons.crowdfunding.app.repository.ProjectRepository;
 import com.fourseasons.crowdfunding.app.repository.UserRepository;
-import com.fourseasons.crowdfunding.app.repository.ProjectCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,7 +30,6 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
-    private final ProjectCategoryRepository categoryRepository;
 
     /**
      * 創建專案
