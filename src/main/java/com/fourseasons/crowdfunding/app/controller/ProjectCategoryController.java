@@ -25,6 +25,8 @@ public class ProjectCategoryController {
 
     /**
      * 獲取所有啟用的分類
+     * 
+     * @return 所有啟用的分類
      */
     @GetMapping
     @Operation(summary = "獲取所有啟用的分類", description = "獲取所有啟用的專案分類")
@@ -35,6 +37,9 @@ public class ProjectCategoryController {
 
     /**
      * 根據ID獲取分類
+     * 
+     * @param categoryId 分類ID
+     * @return 分類詳細資訊
      */
     @GetMapping("/{categoryId}")
     @Operation(summary = "根據ID獲取分類", description = "根據分類ID獲取詳細資訊")
@@ -45,6 +50,9 @@ public class ProjectCategoryController {
 
     /**
      * 創建新分類（管理員功能）
+     * 
+     * @param category 新分類資訊
+     * @return 創建的分類
      */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -56,6 +64,10 @@ public class ProjectCategoryController {
 
     /**
      * 更新分類（管理員功能）
+     * 
+     * @param categoryId 分類ID
+     * @param category   更新的分類資訊
+     * @return 更新後的分類
      */
     @PutMapping("/{categoryId}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -69,6 +81,8 @@ public class ProjectCategoryController {
 
     /**
      * 刪除分類（管理員功能）
+     * 
+     * @param categoryId 分類ID
      */
     @DeleteMapping("/{categoryId}")
     @PreAuthorize("hasRole('ADMIN')")
