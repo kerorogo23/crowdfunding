@@ -3,16 +3,19 @@ package com.fourseasons.crowdfunding.app.service;
 import com.fourseasons.crowdfunding.app.dto.project.ProjectRequest;
 import com.fourseasons.crowdfunding.app.dto.project.ProjectResponse;
 import com.fourseasons.crowdfunding.app.dto.project.ProjectStatusRequest;
+import com.fourseasons.crowdfunding.app.dto.project.ProjectCategoryResponse;
 import com.fourseasons.crowdfunding.app.entity.Project;
 import com.fourseasons.crowdfunding.app.entity.User;
 import com.fourseasons.crowdfunding.app.exception.ResourceNotFoundException;
 import com.fourseasons.crowdfunding.app.exception.UnauthorizedException;
 import com.fourseasons.crowdfunding.app.repository.ProjectRepository;
 import com.fourseasons.crowdfunding.app.repository.UserRepository;
+import com.fourseasons.crowdfunding.app.repository.ProjectCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final ProjectCategoryRepository categoryRepository;
 
     /**
      * 創建專案
@@ -89,7 +93,8 @@ public class ProjectService {
         User currentUser = getCurrentUser();
 
         // 檢查權限：只有創建者或管理員可以刪除
-        if (!project.getCreator().getId().equals(currentUser.getId()) && currentUser.getRole() != User.Role.ADMIN) {
+        if (!project.getCreator().getId().equals(currentUser.getId())
+                && !"ADMIN".equals(currentUser.getRole().getName())) {
             throw new UnauthorizedException("您沒有權限刪除此專案");
         }
 
@@ -111,7 +116,7 @@ public class ProjectService {
         User currentUser = getCurrentUser();
         if (project.getStatus() != Project.ProjectStatus.APPROVED
                 && !project.getCreator().getId().equals(currentUser.getId())
-                && currentUser.getRole() != User.Role.ADMIN) {
+                && !"ADMIN".equals(currentUser.getRole().getName())) {
             throw new UnauthorizedException("您沒有權限查看此專案");
         }
 
@@ -131,7 +136,7 @@ public class ProjectService {
         User currentUser = getCurrentUser();
 
         // 檢查權限：只有管理員可以查看所有專案
-        if (currentUser.getRole() != User.Role.ADMIN) {
+        if (!"ADMIN".equals(currentUser.getRole().getName())) {
             throw new UnauthorizedException("您沒有權限查看所有專案");
         }
 
@@ -177,7 +182,7 @@ public class ProjectService {
         User currentUser = getCurrentUser();
 
         // 檢查權限：只有管理員可以更新狀態
-        if (currentUser.getRole() != User.Role.ADMIN) {
+        if (!"ADMIN".equals(currentUser.getRole().getName())) {
             throw new UnauthorizedException("您沒有權限更新專案狀態");
         }
 
@@ -235,6 +240,46 @@ public class ProjectService {
      */
     private Project getProjectEntityById(Long projectId) {
         return projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("專案不存在"));
+    }
+
+    /**
+     * 進階搜尋專案
+     * 
+     * @param keyword    關鍵字
+     * @param categoryId 分類ID
+     * @param status     專案狀態
+     * @param pageable   分頁資訊
+     * @return 專案分頁結果
+     */
+    public Page<ProjectResponse> searchProjects(String keyword, Long categoryId, Project.ProjectStatus status,
+            Pageable pageable) {
+        Page<Project> projects = projectRepository.searchProjectsAdvanced(keyword, categoryId, status, pageable);
+        return projects.map(ProjectResponse::fromProject);
+    }
+
+    /**
+     * 獲取正在進行中的專案
+     * 
+     * @return 進行中的專案列表
+     */
+    public List<ProjectResponse> getActiveProjects() {
+        List<Project> projects = projectRepository.findActiveProjects();
+        return projects.stream()
+                .map(ProjectResponse::fromProject)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    /**
+     * 根據分類獲取專案
+     * 
+     * @param categoryId 分類ID
+     * @return 專案列表
+     */
+    public List<ProjectResponse> getProjectsByCategory(Long categoryId) {
+        List<Project> projects = projectRepository.findByCategoryId(categoryId);
+        return projects.stream()
+                .map(ProjectResponse::fromProject)
+                .collect(java.util.stream.Collectors.toList());
     }
 
     /**

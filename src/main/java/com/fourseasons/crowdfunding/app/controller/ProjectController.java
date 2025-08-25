@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 /**
  * 專案控制器
@@ -227,5 +228,68 @@ public class ProjectController {
                         @Parameter(name = "id", description = "專案 ID", example = "1", required = true) @PathVariable Long id) {
                 ProjectResponse response = projectService.submitProjectForReview(id);
                 return ResponseEntity.ok(response);
+        }
+
+        /**
+         * 進階搜尋專案
+         * 
+         * @param keyword    搜尋關鍵字
+         * @param categoryId 分類ID
+         * @param status     專案狀態
+         * @param page       頁碼
+         * @param size       每頁大小
+         * @param sortBy     排序欄位
+         * @param sortDir    排序方向
+         * @return 專案分頁回應
+         */
+        @GetMapping("/search")
+        @Operation(summary = "進階搜尋專案", description = "根據關鍵字、分類、狀態搜尋專案")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "搜尋成功") })
+        public ResponseEntity<Page<ProjectResponse>> searchProjects(
+                        @Parameter(description = "搜尋關鍵字") @RequestParam(required = false) String keyword,
+                        @Parameter(description = "分類ID") @RequestParam(required = false) Long categoryId,
+                        @Parameter(description = "專案狀態") @RequestParam(required = false) Project.ProjectStatus status,
+                        @Parameter(description = "頁碼") @RequestParam(defaultValue = "0") int page,
+                        @Parameter(description = "每頁大小") @RequestParam(defaultValue = "10") int size,
+                        @Parameter(description = "排序欄位") @RequestParam(defaultValue = "createdAt") String sortBy,
+                        @Parameter(description = "排序方向") @RequestParam(defaultValue = "desc") String sortDir) {
+
+                Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending()
+                                : Sort.by(sortBy).descending();
+                Pageable pageable = PageRequest.of(page, size, sort);
+
+                Page<ProjectResponse> projects = projectService.searchProjects(keyword, categoryId, status, pageable);
+                return ResponseEntity.ok(projects);
+        }
+
+        /**
+         * 獲取正在進行中的專案
+         * 
+         * @return 進行中的專案列表
+         */
+        @GetMapping("/active")
+        @Operation(summary = "獲取進行中的專案", description = "獲取所有正在進行中的專案")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "查詢成功") })
+        public ResponseEntity<List<ProjectResponse>> getActiveProjects() {
+                List<ProjectResponse> projects = projectService.getActiveProjects();
+                return ResponseEntity.ok(projects);
+        }
+
+        /**
+         * 根據分類獲取專案
+         * 
+         * @param categoryId 分類ID
+         * @return 專案列表
+         */
+        @GetMapping("/category/{categoryId}")
+        @Operation(summary = "根據分類獲取專案", description = "獲取指定分類下的所有專案")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "查詢成功") })
+        public ResponseEntity<List<ProjectResponse>> getProjectsByCategory(
+                        @Parameter(name = "categoryId", description = "分類ID", example = "1", required = true) @PathVariable Long categoryId) {
+                List<ProjectResponse> projects = projectService.getProjectsByCategory(categoryId);
+                return ResponseEntity.ok(projects);
         }
 }

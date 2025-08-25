@@ -4,6 +4,7 @@ import com.fourseasons.crowdfunding.app.dto.project.ProjectRequest;
 import com.fourseasons.crowdfunding.app.dto.project.ProjectResponse;
 import com.fourseasons.crowdfunding.app.dto.project.ProjectStatusRequest;
 import com.fourseasons.crowdfunding.app.entity.Project;
+import com.fourseasons.crowdfunding.app.entity.Role;
 import com.fourseasons.crowdfunding.app.entity.User;
 import com.fourseasons.crowdfunding.app.exception.ResourceNotFoundException;
 import com.fourseasons.crowdfunding.app.exception.UnauthorizedException;
@@ -64,7 +65,8 @@ class ProjectServiceTest {
         testUser.setId(1L);
         testUser.setUsername("testuser");
         testUser.setEmail("test@example.com");
-        testUser.setRole(User.Role.USER);
+        // TODO:
+        testUser.setRole(new Role());
 
         // 設置測試專案
         testProject = new Project();
@@ -199,7 +201,7 @@ class ProjectServiceTest {
     @Test
     void updateProjectStatus_Success() {
         // Arrange
-        testUser.setRole(User.Role.ADMIN);
+        testUser.setRole(new Role());
         testProject.setStatus(Project.ProjectStatus.PENDING);
 
         ProjectStatusRequest statusRequest = new ProjectStatusRequest();

@@ -27,7 +27,7 @@ public class ProjectRequest {
     private String description;
 
     @NotNull(message = "目標金額不能為空")
-    @DecimalMin(value = "0.01", message = "目標金額必須大於 0")
-    @Schema(description = "目標金額", example = "100000.00", required = true)
+    @DecimalMin(value = "1", message = "目標金額必須大於 0")
+    @Schema(description = "目標金額", example = "100000", required = true)
     private BigDecimal goalAmount;
 }
