@@ -2,10 +2,15 @@ package com.fourseasons.crowdfunding.app.config;
 
 import com.fourseasons.crowdfunding.app.entity.Role;
 import com.fourseasons.crowdfunding.app.entity.ProjectCategory;
+import com.fourseasons.crowdfunding.app.entity.User;
 import com.fourseasons.crowdfunding.app.repository.RoleRepository;
 import com.fourseasons.crowdfunding.app.repository.ProjectCategoryRepository;
+import com.fourseasons.crowdfunding.app.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,11 +20,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
+    private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
+
     @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
     private ProjectCategoryRepository categoryRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -27,6 +40,8 @@ public class DataInitializer implements CommandLineRunner {
         initializeRoles();
         // 初始化專案分類資料
         initializeCategories();
+        // 初始化管理員用戶
+        initializeAdminUser();
     }
 
     /**
@@ -51,7 +66,7 @@ public class DataInitializer implements CommandLineRunner {
             adminRole.setName(Role.ROLE_ADMIN);
             roleRepository.save(adminRole);
 
-            System.out.println("角色資料初始化完成");
+            logger.info("角色資料初始化完成");
         }
     }
 
@@ -86,7 +101,35 @@ public class DataInitializer implements CommandLineRunner {
             lifestyleCategory.setDescription("包含美食、旅遊、時尚、運動等生活相關專案");
             categoryRepository.save(lifestyleCategory);
 
-            System.out.println("專案分類資料初始化完成");
+            logger.info("專案分類資料初始化完成");
+        }
+    }
+
+    /**
+     * 初始化管理員帳號資料
+     */
+    private void initializeAdminUser() {
+        // 檢查是否已存在管理員用戶
+        if (!userRepository.existsByUsername("admin") && !userRepository.existsByEmail("admin@crowdfunding.com")) {
+            // 獲取 Admin 角色
+            Role adminRole = roleRepository.findByName(Role.ROLE_ADMIN)
+                    .orElseThrow(() -> new RuntimeException("Admin 角色不存在，請先初始化角色資料"));
+
+            // 創建管理員用戶
+            User adminUser = new User();
+            adminUser.setUsername("admin");
+            adminUser.setEmail("admin@crowdfunding.com");
+            // 預設密碼
+            adminUser.setPassword(passwordEncoder.encode("123456"));
+            adminUser.setRole(adminRole);
+            adminUser.setEnabled(true);
+            adminUser.setAccountNonExpired(true);
+            adminUser.setAccountNonLocked(true);
+            adminUser.setCredentialsNonExpired(true);
+
+            userRepository.save(adminUser);
+            logger.info("管理員用戶初始化完成");
+            logger.info("管理員帳號: admin");
         }
     }
 }

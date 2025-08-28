@@ -12,7 +12,7 @@ import lombok.Data;
 @Schema(description = "登入請求")
 public class LoginRequest {
 
-    @Schema(description = "使用者電子郵件", example = "user@example.com")
+    @Schema(description = "使用者電子郵件", example = "john@example.com")
     @NotBlank(message = "電子郵件不能為空")
     @Email(message = "請輸入有效的電子郵件格式")
     private String email;

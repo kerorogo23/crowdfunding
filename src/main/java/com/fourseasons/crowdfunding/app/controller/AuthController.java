@@ -80,16 +80,17 @@ public class AuthController {
 
     /**
      * 測試端點 - 檢查服務是否正常運行
+     * ex: api是否正常運行
      * 
      * @return 服務狀態
      */
     @GetMapping("/test")
-    @Operation(summary = "服務健康檢查", description = "檢查認證服務是否正常運行")
+    @Operation(summary = "服務健康檢查", description = "檢查服務是否正常運行")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "服務正常") })
     public ResponseEntity<Map<String, String>> test() {
         Map<String, String> response = new HashMap<>();
-        response.put("message", "認證服務正常運行");
+        response.put("message", "服務正常運行");
         response.put("status", "OK");
 
         return ResponseEntity.ok(response);

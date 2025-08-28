@@ -16,6 +16,7 @@ java {
 // 解析 PathVariable/RequestParam 的參數名稱
 tasks.withType(JavaCompile) {
 	options.compilerArgs += ['-parameters']
+	options.encoding = 'UTF-8'
 }
 
 configurations {
